@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# vi: foldmethod=marker foldmarker={{{,}}}
 
 import os
 import sqlite3
@@ -17,7 +18,7 @@ create table normative_category (
   normative_informative
 ) """)
 
-cur.executemany('insert into normative_category values (?, ?, ?)', [
+cur.executemany('insert into normative_category values (?, ?, ?)', [ # {{{
   ('Lu', 'Letter, Uppercase'                                                       , 'norm'),
   ('Ll', 'Letter, Lowercase'                                                       , 'norm'),
   ('Lt', 'Letter, Titlecase'                                                       , 'norm'),
@@ -50,8 +51,9 @@ cur.executemany('insert into normative_category values (?, ?, ?)', [
   ('Sk', 'Symbol, Modifier'                                                        , 'info'),
   ('So', 'Symbol, Other'                                                           , 'info')
 
-])
+]) # }}}
 
+db.commit()
 
 # jcur.execute("""
 # jcreate table normative_category (
@@ -60,10 +62,11 @@ cur.executemany('insert into normative_category values (?, ?, ?)', [
 # j  primary key abbreviation
 # j) """)
 
-with open('UnicodeData.txt') as ucdat_file:
+with open('UnicodeData.txt') as ucdat_file: # {{{
      for ucdat_line in ucdat_file:
 
-         ucdat_elem = ucdat_line.split(';')
+         ucdat_line = ucdat_line.rstrip('\n\r')
+         ucdat_elem = ucdat_line.split(';') # {{{
 
          code_value                    = ucdat_elem[ 0]
          character_name                = ucdat_elem[ 1]
@@ -81,6 +84,13 @@ with open('UnicodeData.txt') as ucdat_file:
          lowercase_mapping             = ucdat_elem[13]
          titlecase_mapping             = ucdat_elem[14]
 
+         code_value_int                = int(code_value, 16)
+
+         # }}}
+
+    #    if character_name[0] == '<':
+    #       print(str(code_value_int) + ': ' + character_name + ' - ' + unicode_1_value)
+
     #    if numeric_value != '':
     #       print(character_name, numeric_value)
 
@@ -92,4 +102,4 @@ with open('UnicodeData.txt') as ucdat_file:
 
          if len(general_category) != 2:
             print(character_name, general_category)
-         
+# }}}         
